@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>登录</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="images/favicon32.ico">
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+
+<style type="text/css">
+*{margin:0;padding:0;}    
+html{font-size: 62.5%;font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;}
+/*html{font: 12px/150% Verdana, 微软雅黑, 宋体;}*/
+body{font-size: 1.6rem; background: #fff;}
+html,body{width:100%;height: 100%;}
+
+.box{width: 500px;height: 300px; border: 1px solid #000;margin:20px;}
+.box1{background: rgb(86, 188, 148);}
+.tit{font-size: 25px; color: #fff; padding-left: 100px;margin-left: 100px;}
+.username, .password, .captcha{margin-top: 10px;margin-left: 50px;}
+.username span, .password span, .captcha span{width: 50px;display: inline-block; color: #fff; font-size: 14px;}
+.username input, .password input, .captcha input{width: 350px; height: 38px; color: #fff;border: 1px solid rgba(255, 255, 255, 0.3);background: rgba(255, 255, 255, 0.3);outline: none;}
+.sub{width: 350px; height: 38px; margin-left: 105px;margin-top: 10px; background: #14977a; border:none; color: #fff;font-size: 14px; cursor:pointer;}
+.sub:hover{background: #1ea98e;}
+/*.isFocus{border: 1px solid #ccc !important;}*/
+/*.isBlur{border: 1px solid rgba(255, 255, 255, 0.3);}*/
+.inpFocus:focus{border: 1px solid #ccc !important;}
+</style>
+</head>
+<body>
+	<a href="index.html">首页</a>
+	<div class="box box1">
+		<form id="loginForm" action="" method="post">
+			<p class="tit">用户中心</p>
+			<p class="username">
+				<span>用户名</span>
+				<input type="text" class="inpFocus"  name="username"  >
+			</p>
+			<p class="password">
+				<span>密 码</span>
+				<input type="password" class="inpFocus" name="password" >
+			</p>
+			<p class="captcha">
+				<span>验证码</span>
+				<input type="text" class="inpFocus" name="captcha" style="width:188px" >
+				<img id="captcha" src="https://www.54nb.com/l/pic.php?0.14238145846896444" style="width: 140px;height: 38px;margin-left: 16px;vertical-align:middle; cursor:pointer;">
+			</p>
+
+			<input class="sub" type="submit" value="登 录" ><!-- onclick="return validateLogin()" -->
+			<p class="showMsg" style="text-align: center; color: red; font-size: 14px;height: 40px; line-height: 40px; margin-left:105px; margin-top:10px; width: 350px"></p>
+		</form>
+
+	</div>	
+
+<script type="text/javascript">
+
+$(function(){
+	(function(){
+		var us = getCookie("aa");
+		// var name = JSON.parse(us).name;
+		if(us!=""){
+			console.log("欢迎"+name+"登录")
+		}else{
+			// window.location.href = "https://www.sogo.com/" ;
+		}
+
+	})();
+
+
+	// 使用form表单提交 return true 时提交
+	$("#loginForm").submit(function(){
+		// return validateLogin();
+		return false;
+	})
+	
+	// 使用ajax提交  要先将form表单提交改为false
+	$(".sub").click(function(){
+		var c = {name:"当当",old:18}
+		var us = JSON.stringify(c)
+		setCookie("user",us,7);
+		setCookie("aa","a111",7);
+		var na = getCookie("user");
+		console.log(JSON.parse(na).name)
+		document.cookie="username=aaaeeeee; expires=Thu, 18 Dec 2043 12:00:00 GMT; path=index.html";
+
+		if(validateLogin()){
+			var cont = $("#loginForm").serialize(); //获取form表单输入内容 序列化表单值创建 URL 编码文本字符串
+			console.log(cont) //username=13156399311&password=123&captcha=
+			var user = {};
+			user.username = $("input[name='username']").val();
+			user.id = 333;
+
+			sessionStorage.setItem("user",JSON.stringify(user));  // 储存到session 需转换为json字符串
+			var us = JSON.parse(sessionStorage.getItem('user'));  //提取时需要将json字符串转换为对象
+
+		
+			// $.ajax({
+			// 	url:'https://www.54nb.com/l/login.php',
+			// 	type:'post',
+			// 	dataType:'json',
+			// 	data:cont,
+			// 	success:function(data){
+			// 	  if(data.error==1){
+			// 		  showMsg(data.msg);
+			// 	  }else{
+			// 		  window.location.href="index.php";
+			// 	  }
+			// 	}
+			// });
+		}
+
+	})
+	// 验证码点击刷新
+	$("#captcha").click(function(){
+		var cap_src = $("#captcha").attr("src");
+
+		if(cap_src.indexOf('?') > 0){
+			$("#captcha").attr("src", cap_src+'&random='+Math.random());
+		}else{
+			$("#captcha").attr("src", cap_src.replace(/\?.*$/,'')+'?'+Math.random());
+
+		}
+	})
+	
+	function showMsg( _msg ){
+		$(".showMsg").text(_msg)
+		$(".showMsg").css("backgroundColor","rgba(0, 0, 0, 0.4)")
+		$('.showMsg').fadeIn('fast');
+
+		setTimeout( function(){
+			$('.showMsg').fadeOut('slow');
+		}, 2000)
+	};
+
+	//  判断输入是否符合要求
+	function validateLogin(){
+		var username = $("input[name='username']").val();
+		var password = $("input[name='password']").val();
+
+		var myreg=/^[1][3,4,5,7,8][0-9]{9}$/; //手机号正则
+
+		if(username == ""){
+			showMsg("用户名不能为空");
+			return false;
+		}
+		if(!myreg.test(username)){
+			showMsg("请输入手机号码");
+			return false;
+		}
+
+		if(password == ""){
+			showMsg("密码不能为空");
+			return false;
+		}
+		return true;
+	}
+	
+	function setCookie(cname,cvalue,exdays){
+	  var d = new Date();
+	  d.setTime(d.getTime()+(exdays*24*60*60*1000));
+	  var expires = "expires="+d.toGMTString();
+	  document.cookie = cname + "=" + cvalue + "; " + expires;
+	}
+
+	function getCookie(cname){
+	  var name = cname + "=";
+	  var ca = document.cookie.split(';');
+	  for(var i=0; i<ca.length; i++) 
+	  {
+	    var c = ca[i].trim();
+	    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+	  }
+	  return "";
+	}	
+
+})
+	
+
+</script>
+</body>
+</html>

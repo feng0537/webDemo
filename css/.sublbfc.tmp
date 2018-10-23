@@ -1,0 +1,53 @@
+html,body{width: 100%;height: 100%;}
+body{background: #ccc;}
+
+.header{
+		background:#ccc url(../images/bg-header.jpg) repeat-x 0px -55px;
+}
+.header .header-content{
+	max-width: 1200px;
+	margin:0 auto;
+	overflow: auto;
+	background: 
+}
+.header .logo{
+	float: left;
+}
+.header .logo a{
+	display: inline-block;
+	vertical-align: middle;
+}
+.header .logo a img{
+
+}
+.header .nav{
+	float: left;
+}
+
+.header .nav li{
+	float: left;
+}
+.header .nav li a{
+	display: inline-block;
+	color: #fff;
+	padding:0 10px;
+	line-height: 60px
+}
+.header .nav li a:hover{
+	color: #f33212;
+}
+.header .opts{
+	float: right;
+}
+.header .opts a{
+	display: inline-block;
+	color: #fff;
+	padding: 0 10px;
+	line-height: 60px;
+}
+
+
+/*banner*/
+.banner{
+	background: #fff;
+}
